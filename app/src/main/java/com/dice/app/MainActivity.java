@@ -402,8 +402,8 @@ public class MainActivity extends ActionBarActivity {
     */
    private Pair<Integer, Integer> rollDice() {
       Random random = new Random();
-      int x1 = random.nextInt(5) + 1;
-      int x2 = random.nextInt(5) + 1;
+      int x1 = random.nextInt(6) + 1;
+      int x2 = random.nextInt(6) + 1;
 
       Pair<Integer, Integer> roll = new Pair(x1, x2);
       return roll;

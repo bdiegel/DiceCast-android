@@ -11,41 +11,48 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="33dip"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:id="@+id/top_layout">
+        android:id="@+id/top_layout"
+        >
 
         <TextView
             android:text="@string/initial_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@id/textMessage"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_gravity="center|top" />
+            android:gravity="center"
+            android:autoText="false"
+            android:singleLine="false"
+            android:layout_gravity="left"
+            android:textIsSelectable="false"
+            android:textSize="25.0sp"/>
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="44dip"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
         android:id="@+id/bottom_layout">
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/roll_button"
             android:id="@+id/rollButton"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textSize="25.0sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -61,27 +68,27 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="98dp"
+            android:layout_height="128dip"
             android:id="@+id/imageViewDie1"
             android:src="@drawable/dice_3"
             android:layout_weight="0.5"
             android:adjustViewBounds="true"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:layout_marginLeft="12dip"
-            android:layout_marginRight="6dip" />
+            android:layout_marginLeft="30dip"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="98dp"
+            android:layout_height="128dip"
             android:id="@+id/imageViewDie2"
             android:src="@drawable/dice_4"
             android:layout_weight="0.5"
             android:adjustViewBounds="true"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="6dip" />
+            android:layout_marginRight="30dip"
+            />
     </LinearLayout>
 
 </RelativeLayout>

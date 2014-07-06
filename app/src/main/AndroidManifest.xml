@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dice.app"
+    package="com.honu.dicecast"
     android:versionCode="1"
     android:versionName="1.0.b">
 
@@ -18,7 +18,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.dice.app.MainActivity"
+            android:name="com.honu.dicecast.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat" >

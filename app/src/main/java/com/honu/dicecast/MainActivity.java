@@ -1,4 +1,4 @@
-package com.dice.app;
+package com.honu.dicecast;
 
 /**
  * Sender application following the Android sender tutorial.

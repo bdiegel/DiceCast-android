@@ -1,11 +1,11 @@
 package com.dice.app;
 
 /**
- * This example sender application follows the Android sender tutorial.
+ * Sender application following the Android sender tutorial.
  * </p>
- * - comments have been lifted directly from this tutorial
+ * - code is annotated with comments from this tutorial
  * - each task or sub-task has been numbered to help navigate the code
- * - this example uses a custom channel (see tutorial for help with media channel)
+ * - this example uses a custom channel
  * - @see: https://developers.google.com/cast/docs/android_sender
  * </p>
  *
@@ -23,17 +23,6 @@ package com.dice.app;
  * - Sender app creates a communication channel: Cast.CastApi.setMessageReceivedCallbacks
  * - Sender sends a message to the receiver over the communication channel: Cast.CastApi.sendMessage
  * </p>
- * Tasks:
- * 1. Adding the Cast Button
- * 2. Handling device selection
- * 3. Launching the receiver
- * 4. Create custom channel (or Media channel)
- * 5. Joining sessions
- * 6. Restoring sessions
- * 7. Notifications
- * 8. Lock screen
- * 9. Volume
- * 10. Error handling
  */
 
 import android.content.res.Resources;
@@ -61,6 +50,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -164,8 +156,19 @@ public class MainActivity extends ActionBarActivity {
             die1.setImageDrawable(icon1);
             die2.setImageDrawable(icon2);
 
-            String message = String.format("You rolled %d: %d and %d", dice.first + dice.second, dice.first, dice.second);
-            sendMessage(message);
+            String message = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
+
+            JSONObject jsonMsg = new JSONObject();
+
+            try {
+               jsonMsg.put("text", message);
+               jsonMsg.put("die1", dice.first);
+               jsonMsg.put("die2", dice.second);
+            } catch (JSONException e) {
+               Log.e(TAG, e.getMessage(), e);
+            }
+
+            sendMessage(jsonMsg.toString());
 
             TextView textMessage = (TextView) findViewById(R.id.textMessage);
             textMessage.setText(message);
@@ -189,7 +192,7 @@ public class MainActivity extends ActionBarActivity {
     * <p/>
     * Note: This example uses the MediaRouteActionProvider to add the Cast button to the ActionBar.
    *
-    * 1,1 The MediaRouter ActionBar provider needs to be added to the application’s menu hierarchy
+    * 1.1 The MediaRouter ActionBar provider needs to be added to the application’s menu hierarchy
     *     defined in XMl. The application Activity needs to extend ActionBarActivity.
     *     @link res/menu/main.xml
     *     @see MainActivity
@@ -424,7 +427,7 @@ public class MainActivity extends ActionBarActivity {
    /**
     * 2. Handling device selection
     *
-    * 2,1 When the user selects a device from the Cast button device list, the application is
+    * 2.1 When the user selects a device from the Cast button device list, the application is
     *     informed of the selected device by extending MediaRouter.Callback.
     *     @see MyMediaRouterCallback
     *
@@ -527,7 +530,7 @@ public class MainActivity extends ActionBarActivity {
    /**
     * 4 Define a Custom Channel
     * <p/>
-    * 4,1 For the sender application to communicate with the receiver application, a custom channel
+    * 4.1 For the sender application to communicate with the receiver application, a custom channel
     *     needs to be created. The sender can use the custom channel to send String messages to the
     *     receiver. Each custom channel is defined by a unique namespace and must start with the
     *     prefix urn:x-cast:,
@@ -543,8 +546,7 @@ public class MainActivity extends ActionBarActivity {
    private class RollDiceChannel implements Cast.MessageReceivedCallback {
 
       public String getNamespace() {
-         //return "urn:x-cast:com.dice.app";
-         return "urn:x-cast:com.google.cast.sample.helloworld";
+         return getString(R.string.namespace);
       }
 
       @Override

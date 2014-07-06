@@ -24,9 +24,4 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:19.+'
     // Be sure you update this version number each time Google Play services is updated.
     compile 'com.google.android.gms:play-services:4.4.+'
-
-
-    //compile 'com.android.support:appcompat-v7:19.1.0'
-    //compile 'com.android.support:mediarouter-v7:19.0.1'
-    //compile 'com.google.android.gms:play-services:4.4.+'
 }

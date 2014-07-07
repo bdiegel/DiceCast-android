@@ -1,7 +1,7 @@
 # DiceCast
 A "Google Cast™ Ready" dice roller for Android. 
 
-# Acknowledgements
+# Acknowledgments
 Artwork provided by [Dino Morelli](https://github.com/dino-)
 
 The [CastHelloText-android](https://github.com/googlecast/CastHelloText-android.git) example application served as a reference implementation.

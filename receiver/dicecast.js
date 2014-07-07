@@ -8,23 +8,14 @@
    // enable debug logging in Cast receiver library
    //cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 
-   console.log('Starting Receiver Manager');
-
    // handle 'ready' event
    castReceiverManager.onReady = function(event) {
-      console.log('Received Ready event: ' + JSON.stringify(event.data));
+      //console.log('Received Ready event: ' + JSON.stringify(event.data));
       window.castReceiverManager.setApplicationState("Application status is ready...");
-   };
-
-   // handle 'sender connected' event
-   castReceiverManager.onSenderConnected = function(event) {
-      console.log('Received Sender Connected event: ' + event.data);
-      console.log(window.castReceiverManager.getSender(event.data).userAgent);
    };
 
    // handle 'sender disconnected' event
    castReceiverManager.onSenderDisconnected = function(event) {
-      console.log('Received Sender Disconnected event: ' + event.data);
       if (window.castReceiverManager.getSenders().length == 0) {
          window.close();
       }
@@ -37,11 +28,8 @@
    // handler for the CastMessageBus message event
    window.messageBus.onMessage = function(event) {
 
-      console.log('Message received [' + event.senderId + ']: ' + JSON.stringify(event.data));
-
       // parse the message
       var message = JSON.parse(event.data);
-      console.log('Message parsed: [text: ' + message.text + ' die1: ' + message.die1 + ' die2: ' + message.die2 + ']');
 
       // update the display
       updateDisplay(message.text, message.die1, message.die2);
@@ -53,7 +41,6 @@
 
    // initialize the CastReceiverManager with an application status message
    window.castReceiverManager.start({statusText: "Application is starting"});
-   console.log('Receiver Manager started');
 };
 
 
@@ -68,7 +55,6 @@ function updateDisplay(text, die1, die2) {
       6: 'die-6sided-6.svg'
    };
 
-   console.log('Update display: ' + text);
    document.getElementById("message").innerHTML=text;
    document.getElementById("die1").src=imgs[die1];
    document.getElementById("die2").src=imgs[die2];

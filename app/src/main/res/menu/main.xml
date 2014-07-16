@@ -2,10 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.honu.dicecast.MainActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+    <item android:id="@+id/info_menu"
+          android:title="@string/info_menu"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
     <item
         android:id="@+id/media_route_menu_item"
         android:title="@string/media_route_menu_title"

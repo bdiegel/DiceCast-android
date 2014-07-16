@@ -25,6 +25,7 @@ package com.honu.dicecast;
  * </p>
  */
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -222,6 +223,7 @@ public class MainActivity extends ActionBarActivity {
             (MediaRouteActionProvider) MenuItemCompat.getActionProvider(mediaRouteMenuItem);
       mediaRouteActionProvider.setRouteSelector(mMediaRouteSelector);
 
+
       return true;
    }
 
@@ -232,8 +234,11 @@ public class MainActivity extends ActionBarActivity {
       // as you specify a parent activity in AndroidManifest.xml.
       int id = item.getItemId();
 
-      if (id == R.id.action_settings) {
-         return true;
+//      if (id == R.id.action_settings) {
+//         return true;
+//      } else
+      if (id == R.id.info_menu) {
+         startActivity(new Intent(this, InfoActivity.class));
       }
       return super.onOptionsItemSelected(item);
    }

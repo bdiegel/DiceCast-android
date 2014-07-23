@@ -24,9 +24,4 @@
         android:text="Small Text"
         android:id="@+id/value_view"/>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </TableRow>
-
 </LinearLayout>

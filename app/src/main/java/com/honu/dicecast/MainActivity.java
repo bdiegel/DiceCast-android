@@ -25,9 +25,12 @@ package com.honu.dicecast;
  * </p>
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -116,6 +119,11 @@ public class MainActivity extends ActionBarActivity {
       icons.put(6, R.drawable.dice_6);
    }
 
+   // sensor manager
+   private SensorManager mSensorManager;
+
+   // shake event detector
+   private DiceShaker mDiceShaker;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -145,38 +153,56 @@ public class MainActivity extends ActionBarActivity {
 
          @Override
          public void onClick(View v) {
-            Pair<Integer, Integer> dice = rollDice();
-
-            Resources res = getResources();
-            Drawable icon1 = res.getDrawable(icons.get(dice.first));
-            Drawable icon2 = res.getDrawable(icons.get(dice.second));
-
-            ImageView die1 = (ImageView) findViewById(R.id.imageViewDie1);
-            ImageView die2 = (ImageView) findViewById(R.id.imageViewDie2);
-
-            die1.setImageDrawable(icon1);
-            die2.setImageDrawable(icon2);
-
-            String message = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
-
-            JSONObject jsonMsg = new JSONObject();
-
-            try {
-               jsonMsg.put("text", message);
-               jsonMsg.put("die1", dice.first);
-               jsonMsg.put("die2", dice.second);
-            } catch (JSONException e) {
-               Log.e(TAG, e.getMessage(), e);
-            }
-
-            sendMessage(jsonMsg.toString());
-
-            TextView textMessage = (TextView) findViewById(R.id.textMessage);
-            textMessage.setText(message);
-
-            Log.d(TAG, message);
+            handleDiceRoll();
          }
       });
+
+      // create dice shake listener
+      mDiceShaker = new DiceShaker(new IDiceShakeListener() {
+         @Override
+         public void onShake() {
+            handleDiceRoll();
+         }
+      });
+
+      // register dice shake listener fpr accelerometer events
+      mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+      mSensorManager.registerListener(mDiceShaker,
+            mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_NORMAL);
+   }
+
+   private void handleDiceRoll() {
+      Pair<Integer, Integer> dice = rollDice();
+
+      Resources res = getResources();
+      Drawable icon1 = res.getDrawable(icons.get(dice.first));
+      Drawable icon2 = res.getDrawable(icons.get(dice.second));
+
+      ImageView die1 = (ImageView) findViewById(R.id.imageViewDie1);
+      ImageView die2 = (ImageView) findViewById(R.id.imageViewDie2);
+
+      die1.setImageDrawable(icon1);
+      die2.setImageDrawable(icon2);
+
+      String message = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
+
+      JSONObject jsonMsg = new JSONObject();
+
+      try {
+         jsonMsg.put("text", message);
+         jsonMsg.put("die1", dice.first);
+         jsonMsg.put("die2", dice.second);
+      } catch (JSONException e) {
+         Log.e(TAG, e.getMessage(), e);
+      }
+
+      sendMessage(jsonMsg.toString());
+
+      TextView textMessage = (TextView) findViewById(R.id.textMessage);
+      textMessage.setText(message);
+
+      Log.d(TAG, message);
    }
 
    /**
@@ -234,9 +260,6 @@ public class MainActivity extends ActionBarActivity {
       // as you specify a parent activity in AndroidManifest.xml.
       int id = item.getItemId();
 
-//      if (id == R.id.action_settings) {
-//         return true;
-//      } else
       if (id == R.id.info_menu) {
          startActivity(new Intent(this, InfoActivity.class));
       }
@@ -250,6 +273,11 @@ public class MainActivity extends ActionBarActivity {
       // 2.2 assign callback when the application Activity is active
       mMediaRouter.addCallback(mMediaRouteSelector, mMediaRouterCallback,
             MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
+
+      // register our shake listener
+      mSensorManager.registerListener(mDiceShaker,
+            mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_NORMAL);
    }
 
    @Override
@@ -259,6 +287,10 @@ public class MainActivity extends ActionBarActivity {
       if (isFinishing()) {
          mMediaRouter.removeCallback(mMediaRouterCallback);
       }
+
+      // de-register shake listener
+      mSensorManager.unregisterListener(mDiceShaker);
+
       super.onPause();
    }
 
@@ -560,4 +592,5 @@ public class MainActivity extends ActionBarActivity {
          Log.d(TAG, "onMessageReceived: " + message);
       }
    }
+
 }

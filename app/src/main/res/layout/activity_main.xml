@@ -27,7 +27,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:gravity="center"
-            android:autoText="false"
             android:singleLine="false"
             android:layout_gravity="left"
             android:textIsSelectable="false"

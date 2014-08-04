@@ -6,10 +6,10 @@ This project uses the [CastCompanionLibrary](https://github.com/googlecast/CastC
 a wrapper around the Cast SDK that reduces the amount of boilerplate code needed by an 
 application to provide basic casting.
  
-You can get idea of what CCL can do you for by looking at some basic cast examples:
+Have a look at some basic cast examples that do not use CCL:
 
 * The sample application [CastHelloText-android](https://github.com/googlecast/CastHelloText-android.git)
-* This MainActivity prior to integrating CCL [v1.0.0](https://github.com/bdiegel/DiceCast-android/blob/v1.0.0/app/src/main/java/com/honu/dicecast/MainActivity.java) 
+* The DiceCast MainActivity prior to integrating CCL [v1.0.0](https://github.com/bdiegel/DiceCast-android/blob/v1.0.0/app/src/main/java/com/honu/dicecast/MainActivity.java) 
 
 # Project Setup
 This is an Android Studio project. The gradle build has an **external** dependency on the Android 
@@ -20,8 +20,8 @@ The structure of the working directory:
 
   1. create a directory that will hold both projects and cd into it
   2. git clone [https://github.com/bdiegel/DiceCast-android.git]()
-  3. git clone [https://github.com/googlecast/CastCompanionLibrary-android]() CastCompanionLibrary
-   </br>**OR**</br>
+  3. git clone [https://github.com/googlecast/CastCompanionLibrary-android]() CastCompanionLibrary   
+   **OR**   
    git clone [https://github.com/bdiegel/CastCompanionLibrary-android.git]() CastCompanionLibrary
 
 My fork of CCL uses an updated GMS Play Services SDK and Support Library, providing updated Cast icons.  

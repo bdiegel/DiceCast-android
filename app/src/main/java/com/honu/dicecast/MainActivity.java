@@ -220,9 +220,9 @@ public class MainActivity extends ActionBarActivity {
    private void sendMessage(String message) {
       try {
          mCastMgr.sendDataMessage(message, mDiceRollerChannel.getNamespace());
-         } catch (Exception e) {
-            Log.e(TAG, "Exception while sending message", e);
-         }
+      } catch (Exception e) {
+         Log.e(TAG, "Exception while sending message", e);
+      }
    }
 
    /**

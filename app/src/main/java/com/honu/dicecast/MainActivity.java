@@ -38,218 +38,216 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-   // receiver application identifier
-   private static String APPLICATION_ID;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-   private static RollDiceChannel mDiceRollerChannel;
+    static Map<Integer, Integer> icons = new HashMap<>();
 
-   private static final String TAG = MainActivity.class.getSimpleName();
+    private static String APPLICATION_ID;
 
-   private SensorManager mSensorManager;
+    private static RollDiceChannel mDiceRollerChannel;
 
-   private DiceShaker mDiceShaker;
+    private static DataCastManager mCastMgr;
 
-   private static DataCastManager mCastMgr;
+    static {
+        icons.put(1, R.drawable.dice_1);
+        icons.put(2, R.drawable.dice_2);
+        icons.put(3, R.drawable.dice_3);
+        icons.put(4, R.drawable.dice_4);
+        icons.put(5, R.drawable.dice_5);
+        icons.put(6, R.drawable.dice_6);
+    }
 
-   static Map<Integer, Integer> icons = new HashMap<>();
+    private SensorManager mSensorManager;
+    private DiceShaker mDiceShaker;
 
-   static {
-      icons.put(1, R.drawable.dice_1);
-      icons.put(2, R.drawable.dice_2);
-      icons.put(3, R.drawable.dice_3);
-      icons.put(4, R.drawable.dice_4);
-      icons.put(5, R.drawable.dice_5);
-      icons.put(6, R.drawable.dice_6);
-   }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        // check that Google Play services is available and correct version
+        BaseCastManager.checkGooglePlayServices(this);
 
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
+        // create data channel
+        mDiceRollerChannel = new RollDiceChannel();
 
-      // check that Google Play services is available and correct version
-      BaseCastManager.checkGooglePlayServices(this);
+        // initialize the cast manager
+        createCastManager(getApplicationContext());
 
-      // create data channel
-      mDiceRollerChannel = new RollDiceChannel();
+        // button user presses to roll the dice
+        Button rollButton = (Button) findViewById(R.id.rollButton);
 
-      // initialize the cast manager
-      createCastManager(getApplicationContext());
+        // generate two random integers when button is clicked
+        rollButton.setOnClickListener(new View.OnClickListener() {
 
-      // button user presses to roll the dice
-      Button rollButton = (Button) findViewById(R.id.rollButton);
+            @Override
+            public void onClick(View v) {
+                handleDiceRoll();
+            }
+        });
 
-      // generate two random integers when button is clicked
-      rollButton.setOnClickListener(new View.OnClickListener() {
+        // create dice shake listener
+        mDiceShaker = new DiceShaker(new IDiceShakeListener() {
+            @Override
+            public void onShake() {
+                handleDiceRoll();
+            }
+        });
 
-         @Override
-         public void onClick(View v) {
-            handleDiceRoll();
-         }
-      });
+        // register dice shake listener fpr accelerometer events
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mDiceShaker,
+              mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+              SensorManager.SENSOR_DELAY_NORMAL);
+    }
 
-      // create dice shake listener
-      mDiceShaker = new DiceShaker(new IDiceShakeListener() {
-         @Override
-         public void onShake() {
-            handleDiceRoll();
-         }
-      });
+    private DataCastManager createCastManager(Context ctx) {
+        APPLICATION_ID = getString(R.string.app_id);
+        Log.d(TAG, APPLICATION_ID);
+        CastConfiguration castConfiguration = new CastConfiguration.Builder(APPLICATION_ID).
+              addNamespace(mDiceRollerChannel.getNamespace()).build();
+        
+        mCastMgr = DataCastManager.initialize(ctx, castConfiguration);
+        mCastMgr.incrementUiCounter();
 
-      // register dice shake listener fpr accelerometer events
-      mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-      mSensorManager.registerListener(mDiceShaker,
-            mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-               SensorManager.SENSOR_DELAY_NORMAL);
-   }
+        return mCastMgr;
+    }
 
-  private DataCastManager createCastManager(Context ctx) {
-     APPLICATION_ID = getString(R.string.app_id);
-     Log.d(TAG, APPLICATION_ID);
-     CastConfiguration castConfiguration = new CastConfiguration.Builder(APPLICATION_ID).
-            addNamespace(mDiceRollerChannel.getNamespace()).build();
-     mCastMgr = DataCastManager.initialize(ctx, castConfiguration);
-     mCastMgr.incrementUiCounter();
+    private void handleDiceRoll() {
+        Pair<Integer, Integer> dice = rollDice();
 
-     return mCastMgr;
-   }
+        Drawable icon1 = ContextCompat.getDrawable(this, icons.get(dice.first));
+        Drawable icon2 = ContextCompat.getDrawable(this, icons.get(dice.second));
 
-   private void handleDiceRoll() {
-      Pair<Integer, Integer> dice = rollDice();
+        ImageView die1 = (ImageView) findViewById(R.id.imageViewDie1);
+        ImageView die2 = (ImageView) findViewById(R.id.imageViewDie2);
 
-      Drawable icon1 = ContextCompat.getDrawable(this, icons.get(dice.first));
-      Drawable icon2 = ContextCompat.getDrawable(this, icons.get(dice.second));
+        die1.setImageDrawable(icon1);
+        die2.setImageDrawable(icon2);
 
-      ImageView die1 = (ImageView) findViewById(R.id.imageViewDie1);
-      ImageView die2 = (ImageView) findViewById(R.id.imageViewDie2);
+        String text = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
 
-      die1.setImageDrawable(icon1);
-      die2.setImageDrawable(icon2);
+        JSONObject jsonMsg = new JSONObject();
 
-      String text = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
+        try {
+            jsonMsg.put("text", text);
+            jsonMsg.put("die1", dice.first);
+            jsonMsg.put("die2", dice.second);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
 
-      JSONObject jsonMsg = new JSONObject();
+        sendMessage(jsonMsg.toString());
 
-      try {
-         jsonMsg.put("text", text);
-         jsonMsg.put("die1", dice.first);
-         jsonMsg.put("die2", dice.second);
-      } catch (JSONException e) {
-         Log.e(TAG, e.getMessage(), e);
-      }
+        String message = String.format("You rolled: %d", dice.first + dice.second);
+        String sum = String.format("%d + %d", dice.first, dice.second);
+        TextView textMessage = (TextView) findViewById(R.id.textMessage);
+        textMessage.setText(message);
+        TextView sumTextView = (TextView) findViewById(R.id.dice_sum);
+        sumTextView.setText(sum);
 
-      sendMessage(jsonMsg.toString());
+        Log.d(TAG, message);
+    }
 
-      String message = String.format("You rolled: %d", dice.first + dice.second);
-      String sum = String.format("%d + %d", dice.first, dice.second);
-      TextView textMessage = (TextView) findViewById(R.id.textMessage);
-      textMessage.setText(message);
-      TextView sumTextView = (TextView) findViewById(R.id.dice_sum);
-      sumTextView.setText(sum);
+    /**
+     * Add the Cast Button
+     * <p/>
+     * The MediaRouter framework provides a Cast button and a list selection dialog for selecting a
+     * route. The MediaRouter framework interfaces with the Cast SDK via a MediaRouteProvider
+     * implementation to perform the discovery on behalf of the application.
+     * <p/>
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-      Log.d(TAG, message);
-   }
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
 
-   /**
-    * Add the Cast Button
-    * <p/>
-    * The MediaRouter framework provides a Cast button and a list selection dialog for selecting a
-    * route. The MediaRouter framework interfaces with the Cast SDK via a MediaRouteProvider
-    * implementation to perform the discovery on behalf of the application.
-    * <p/>
-    */
-   @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
+        // Add the MediaRouter via our cast manager
+        mCastMgr.addMediaRouterButton(menu, R.id.media_route_menu_item);
 
-      // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-      // Add the MediaRouter via our cast manager
-      mCastMgr.addMediaRouterButton(menu, R.id.media_route_menu_item);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-      return true;
-   }
+        if (id == R.id.info_menu) {
+            startActivity(new Intent(this, InfoActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-   @Override
-   public boolean onOptionsItemSelected(MenuItem item) {
-      // Handle action bar item clicks here. The action bar will
-      // automatically handle clicks on the Home/Up button, so long
-      // as you specify a parent activity in AndroidManifest.xml.
-      int id = item.getItemId();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-      if (id == R.id.info_menu) {
-         startActivity(new Intent(this, InfoActivity.class));
-      }
-      return super.onOptionsItemSelected(item);
-   }
+        mCastMgr.incrementUiCounter();
 
-   @Override
-   protected void onResume() {
-      super.onResume();
+        // register our shake listener
+        mSensorManager.registerListener(mDiceShaker,
+              mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+              SensorManager.SENSOR_DELAY_NORMAL);
+    }
 
-      mCastMgr.incrementUiCounter();
+    @Override
+    protected void onPause() {
 
-      // register our shake listener
-      mSensorManager.registerListener(mDiceShaker,
-            mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_NORMAL);
-   }
+        mCastMgr.decrementUiCounter();
 
-   @Override
-   protected void onPause() {
+        // de-register shake listener
+        mSensorManager.unregisterListener(mDiceShaker);
 
-      mCastMgr.decrementUiCounter();
+        super.onPause();
+    }
 
-      // de-register shake listener
-      mSensorManager.unregisterListener(mDiceShaker);
+    /**
+     * Send receiver string messages (JSON) using our custom channel
+     *
+     * @param message
+     */
+    private void sendMessage(String message) {
+        try {
+            mCastMgr.sendDataMessage(message, mDiceRollerChannel.getNamespace());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception while sending message", e);
+        }
+    }
 
-      super.onPause();
-   }
+    /**
+     * Generate a pair of random integers between 1 and 6.
+     */
+    private Pair<Integer, Integer> rollDice() {
+        Random random = new Random();
+        int x1 = random.nextInt(6) + 1;
+        int x2 = random.nextInt(6) + 1;
 
-   /**
-    * Send receiver string messages (JSON) using our custom channel
-    *
-    * @param message
-    */
-   private void sendMessage(String message) {
-      try {
-         mCastMgr.sendDataMessage(message, mDiceRollerChannel.getNamespace());
-      } catch (Exception e) {
-         Log.e(TAG, "Exception while sending message", e);
-      }
-   }
+        Pair<Integer, Integer> roll = new Pair(x1, x2);
+        return roll;
+    }
 
-   /**
-    * Generate a pair of random integers between 1 and 6.
-    */
-   private Pair<Integer, Integer> rollDice() {
-      Random random = new Random();
-      int x1 = random.nextInt(6) + 1;
-      int x2 = random.nextInt(6) + 1;
+    /**
+     * Custom Channel to send messages between client and receiver
+     */
+    private class RollDiceChannel extends DataCastConsumerImpl {
 
-      Pair<Integer, Integer> roll = new Pair(x1, x2);
-      return roll;
-   }
+        public String getNamespace() {
+            return getString(R.string.namespace);
+        }
 
-   /**
-    * Custom Channel to send messages between client and receiver
-    */
-   private class RollDiceChannel extends DataCastConsumerImpl {
+        @Override
+        public void onMessageReceived(CastDevice castDevice, String namespace, String message) {
+            Log.d(TAG, "onMessageReceived: " + message);
+        }
 
-      public String getNamespace() {
-         return getString(R.string.namespace);
-      }
-
-      @Override
-      public void onMessageReceived(CastDevice castDevice, String namespace, String message) {
-         Log.d(TAG, "onMessageReceived: " + message);
-      }
-
-      @Override
-      public void onMessageSendFailed(Status status) {
-         Log.d(TAG, "onMessageSendFailed: " + status);
-      }
-   }
+        @Override
+        public void onMessageSendFailed(Status status) {
+            Log.d(TAG, "onMessageSendFailed: " + status);
+        }
+    }
 
 }

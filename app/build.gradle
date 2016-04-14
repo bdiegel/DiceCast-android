@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 10001
         versionName '1.0.1b'
     }
@@ -46,5 +46,6 @@ if ( project.ext.loadSign ) {
 }
 
 dependencies {
-    compile project(':CastCompanionLibrary')
+    //compile project(path: ':CastCompanionLibrary')
+    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.3'
 }

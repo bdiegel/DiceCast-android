@@ -6,12 +6,12 @@ package com.honu.dicecast;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -23,9 +23,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.common.api.Status;
-import com.google.sample.castcompanionlibrary.cast.BaseCastManager;
-import com.google.sample.castcompanionlibrary.cast.DataCastManager;
-import com.google.sample.castcompanionlibrary.cast.callbacks.DataCastConsumerImpl;
+import com.google.android.libraries.cast.companionlibrary.cast.BaseCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
+import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,28 +36,22 @@ import java.util.Map;
 import java.util.Random;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-   // application identifier
+   // receiver application identifier
    private static String APPLICATION_ID;
 
-   // custom channel for application
    private static RollDiceChannel mDiceRollerChannel;
 
-   // identifier for source of log messages
    private static final String TAG = MainActivity.class.getSimpleName();
 
-   // sensor manager
    private SensorManager mSensorManager;
 
-   // shake event detector
    private DiceShaker mDiceShaker;
 
-   // cast manager
    private static DataCastManager mCastMgr;
 
-   // dice images
-   static Map<Integer, Integer> icons = new HashMap<Integer, Integer>();
+   static Map<Integer, Integer> icons = new HashMap<>();
 
    static {
       icons.put(1, R.drawable.dice_1);
@@ -75,10 +70,6 @@ public class MainActivity extends ActionBarActivity {
 
       // check that Google Play services is available and correct version
       BaseCastManager.checkGooglePlayServices(this);
-
-      // set our application id
-      APPLICATION_ID = getString(R.string.app_id);
-      Log.d(TAG, APPLICATION_ID);
 
       // create data channel
       mDiceRollerChannel = new RollDiceChannel();
@@ -113,22 +104,22 @@ public class MainActivity extends ActionBarActivity {
                SensorManager.SENSOR_DELAY_NORMAL);
    }
 
-   private static DataCastManager createCastManager(Context ctx) {
-      if (null == mCastMgr) {
-         mCastMgr = DataCastManager.initialize(ctx, APPLICATION_ID, mDiceRollerChannel.getNamespace());
-         mCastMgr.incrementUiCounter();
-      }
-      mCastMgr.setContext(ctx);
+  private DataCastManager createCastManager(Context ctx) {
+     APPLICATION_ID = getString(R.string.app_id);
+     Log.d(TAG, APPLICATION_ID);
+     CastConfiguration castConfiguration = new CastConfiguration.Builder(APPLICATION_ID).
+            addNamespace(mDiceRollerChannel.getNamespace()).build();
+     mCastMgr = DataCastManager.initialize(ctx, castConfiguration);
+     mCastMgr.incrementUiCounter();
 
-      return mCastMgr;
+     return mCastMgr;
    }
 
    private void handleDiceRoll() {
       Pair<Integer, Integer> dice = rollDice();
 
-      Resources res = getResources();
-      Drawable icon1 = res.getDrawable(icons.get(dice.first));
-      Drawable icon2 = res.getDrawable(icons.get(dice.second));
+      Drawable icon1 = ContextCompat.getDrawable(this, icons.get(dice.first));
+      Drawable icon2 = ContextCompat.getDrawable(this, icons.get(dice.second));
 
       ImageView die1 = (ImageView) findViewById(R.id.imageViewDie1);
       ImageView die2 = (ImageView) findViewById(R.id.imageViewDie2);
@@ -136,12 +127,12 @@ public class MainActivity extends ActionBarActivity {
       die1.setImageDrawable(icon1);
       die2.setImageDrawable(icon2);
 
-      String message = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
+      String text = String.format("You rolled (%d, %d): %d", dice.first, dice.second, dice.first + dice.second);
 
       JSONObject jsonMsg = new JSONObject();
 
       try {
-         jsonMsg.put("text", message);
+         jsonMsg.put("text", text);
          jsonMsg.put("die1", dice.first);
          jsonMsg.put("die2", dice.second);
       } catch (JSONException e) {
@@ -150,8 +141,12 @@ public class MainActivity extends ActionBarActivity {
 
       sendMessage(jsonMsg.toString());
 
+      String message = String.format("You rolled: %d", dice.first + dice.second);
+      String sum = String.format("%d + %d", dice.first, dice.second);
       TextView textMessage = (TextView) findViewById(R.id.textMessage);
       textMessage.setText(message);
+      TextView sumTextView = (TextView) findViewById(R.id.dice_sum);
+      sumTextView.setText(sum);
 
       Log.d(TAG, message);
    }

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DiceCast</string>
+    <!-- receiver application id -->
     <string name="app_id">3B0CFFB2</string>
+    <!-- testing: <string name="app_id">C635D688</string> -->
+
+    <!-- channel identifier -->
     <string name="namespace">urn:x-cast:com.honu.dicecast</string>
+    <string name="app_name">DiceCast</string>
     <string name="info_menu">Info</string>
     <string name="media_route_menu_title">Play on…</string>
     <string name="initial_message">Ready to roll?</string>
     <string name="roll_button">Tap here or shake device to roll again</string>
     <string name="title_activity_info">Info</string>s
+    <string name="initial_sum"></string>
 
     <!-- Feedback -->
     <string name="title_send_feedback">Send feedback</string>

@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
 
+<head>
     <style type="text/css">
-	  body {
-	    overflow:hidden;
-	  }
-      div#container{
-	    height:720PX;
-	    width:1280PX;
-	    text-align:center;
-	    border:0px solid silver;
-	    display: table-cell;
-	    vertical-align:middle;
-	    color:#FFFFFF;
-	    background-color:#006600;
-	    font-weight:bold;
-	    font-family:Verdana, Geneva, sans-serif;
-	    font-size:40px;
-      }
-      div#dice{
-        margin-top: 1em;
-	  }
-    </style>
+    body {
+        overflow: hidden;
+    }
 
-    <title>Dice Cast</title>
-  </head>
-  <body>
+    div#container {
+        height: 720PX;
+        width: 1280PX;
+        text-align: center;
+        border: 0px solid silver;
+        display: table-cell;
+        vertical-align: middle;
+        color: #FFFFFF;
+        background-color: #006600;
+        font-weight: bold;
+        font-family: Verdana, Geneva, sans-serif;
+        font-size: 40px;
+    }
+
+    div#dice {
+        margin-top: 1em;
+    }
+
+    div#footer {
+        font-size: 10px;
+    }
+    </style>
+    <title>Cast Dice</title>
+</head>
+
+<body>
     <div id="container">
-	<div id="message">Ready to roll?</div>
-    <div id="dice">
-        <img id="die1" src="die-6sided-3.svg"/>
-        <img id="die2" src="die-6sided-4.svg"/>
-    </div>
+        <div id="message">Ready to roll?</div>
+        <div id="dice">
+            <img id="die1" src="die-6sided-3.svg" />
+            <img id="die2" src="die-6sided-4.svg" />
+        </div>
+        <div id="footer">DiceCast v2</div>
     </div>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script src="dicecast.js"></script>
-  </body>
+</body>
+
 </html>

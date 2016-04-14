@@ -1,11 +1,12 @@
 package com.honu.dicecast;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Pair;
@@ -25,24 +26,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InfoActivity extends ListActivity {
+public class InfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<Pair<String, String>> data;
-        data = new ArrayList();
-        data.add(new Pair("Version", BuildConfig.VERSION_NAME));
-        data.add(new Pair("License", "BSD-3"));
-        data.add(new Pair("Feedback", "Send feedback"));
-        data.add(new Pair("Author", "Honu Apps"));
+        setContentView(R.layout.activity_info);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(R.string.title_activity_info);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        List<Pair<String, String>> data = new ArrayList<Pair<String, String>>();
+        data.add(new Pair<String, String>("Version", BuildConfig.VERSION_NAME));
+        data.add(new Pair<String, String>("License", "BSD-3"));
+        data.add(new Pair<String, String>("Feedback", "Send feedback"));
+        data.add(new Pair<String, String>("Author", "Honu Apps"));
+
+        ListView listView = (ListView) findViewById(R.id.info_listview);
 
         ListAdapter adapter = new PairAdapter(this, data);
-        this.setListAdapter(adapter);
-
-        ListView view = this.getListView();
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
@@ -102,6 +112,13 @@ public class InfoActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

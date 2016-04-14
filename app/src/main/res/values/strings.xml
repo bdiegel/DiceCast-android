@@ -11,8 +11,8 @@
     <string name="info_menu">Info</string>
     <string name="media_route_menu_title">Play on…</string>
     <string name="initial_message">Ready to roll?</string>
-    <string name="roll_button">Tap here or shake device to roll again</string>
-    <string name="title_activity_info">Info</string>s
+    <string name="roll_button">tap screen or shake device to roll</string>
+    <string name="title_activity_info">Info</string>
     <string name="initial_sum"></string>
 
     <!-- Feedback -->

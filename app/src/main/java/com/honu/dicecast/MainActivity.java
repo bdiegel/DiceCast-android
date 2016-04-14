@@ -12,12 +12,12 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
+
         // check that Google Play services is available and correct version
         BaseCastManager.checkGooglePlayServices(this);
 
@@ -74,11 +81,9 @@ public class MainActivity extends AppCompatActivity {
         // initialize the cast manager
         createCastManager(getApplicationContext());
 
-        // button user presses to roll the dice
-        Button rollButton = (Button) findViewById(R.id.rollButton);
-
-        // generate two random integers when button is clicked
-        rollButton.setOnClickListener(new View.OnClickListener() {
+        // generate two random integers when tapped
+        View content = findViewById(R.id.root_layout);
+        content.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

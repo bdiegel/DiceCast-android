@@ -43,7 +43,7 @@ public class InfoActivity extends AppCompatActivity {
         }
 
         List<Pair<String, String>> data = new ArrayList<Pair<String, String>>();
-        data.add(new Pair<String, String>("Version", BuildConfig.VERSION_NAME));
+        data.add(new Pair<String, String>("Version", getVersionString()));
         data.add(new Pair<String, String>("License", "BSD-3"));
         data.add(new Pair<String, String>("Feedback", "Send feedback"));
         data.add(new Pair<String, String>("Author", "Honu Apps"));
@@ -68,6 +68,10 @@ public class InfoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    protected String getVersionString() {
+        return "v" + BuildConfig.VERSION_NAME + " (" + BuildConfig.BUILD_TYPE + "-" + BuildConfig.VERSION_CODE + ")";
     }
 
     protected void showLicenseInfo() {

@@ -2,9 +2,9 @@ DiceCast
 ========
 A "Google Cast™ Ready" dice roller for Android. 
 
-<img src='res/prod/nexus4/connect_screenshot.png' width=200/>
-<img src='res/prod/nexus4/ready_screenshot.png' width=200/>
-<img src='res/prod/nexus4/roll_screenshot.png' width=200/>
+<img src='res/prod/nexus5/ready.png' width=200/>
+<img src='res/prod/nexus5/connect.png' width=200/>
+<img src='res/prod/nexus5/roll.png' width=200/>
 
 ### About
 DiceCast demonstrates how to use the Cast API for non-media based application development. It is a basic sender
@@ -22,19 +22,16 @@ Have a look at some basic cast examples that do not use CCL:
 * The DiceCast MainActivity prior to integrating CCL [v1.0.0](https://github.com/bdiegel/DiceCast-android/blob/v1.0.0/app/src/main/java/com/honu/dicecast/MainActivity.java) 
 
 ### Project Setup
-This is an Android Studio project. The gradle build has an **external** dependency on the Android 
-library project [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android).
+This is an Android Studio project. The default build setup has no external dependencies.
+
+You can also build the CCL library yourself from the project [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android).
 See settings.gradle and build.gradle for details of how this dependency is configured.
 
 The structure of the working directory:
 
   1. create a directory that will hold both projects and cd into it
   2. git clone [https://github.com/bdiegel/DiceCast-android.git]()
-  3. git clone [https://github.com/googlecast/CastCompanionLibrary-android]() CastCompanionLibrary   
-   **OR**   
-   git clone [https://github.com/bdiegel/CastCompanionLibrary-android.git]() CastCompanionLibrary
-
-My fork of CCL uses an updated GMS Play Services SDK and Support Library, providing updated Cast icons.  
+  3. git clone [https://github.com/googlecast/CastCompanionLibrary-android]() CastCompanionLibrary
 
 ### Acknowledgments
 * The [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android) is provided by [googlecast](https://github.com/googlecast) 

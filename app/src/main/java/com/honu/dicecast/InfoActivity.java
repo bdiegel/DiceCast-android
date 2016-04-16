@@ -43,10 +43,10 @@ public class InfoActivity extends AppCompatActivity {
         }
 
         List<Pair<String, String>> data = new ArrayList<Pair<String, String>>();
-        data.add(new Pair<String, String>("Version", getVersionString()));
-        data.add(new Pair<String, String>("License", "BSD-3"));
-        data.add(new Pair<String, String>("Feedback", "Send feedback"));
-        data.add(new Pair<String, String>("Author", "Honu Apps"));
+        data.add(new Pair<String, String>(getString(R.string.info_title_version), getVersionString()));
+        data.add(new Pair<String, String>(getString(R.string.info_title_license), getString(R.string.info_value_license)));
+        data.add(new Pair<String, String>(getString(R.string.info_title_feedback), getString(R.string.info_value_feedback)));
+        data.add(new Pair<String, String>(getString(R.string.info_title_author), getString(R.string.info_value_author)));
 
         ListView listView = (ListView) findViewById(R.id.info_listview);
 
@@ -79,7 +79,7 @@ public class InfoActivity extends AppCompatActivity {
         alert.setTitle("License information");
 
         TextView tv = new TextView(this);
-        tv.setText(Html.fromHtml(getString(R.string.bsd3_license)));
+        tv.setText(Html.fromHtml(getString(R.string.alv2_license)));
         tv.setMovementMethod(new ScrollingMovementMethod());
         tv.setPadding(12, 0, 12, 0);
         alert.setView(tv);

@@ -45,3 +45,6 @@ by [Ben Jakuben](http://teamtreehouse.com/bendog24).
 
 ### Other
 Google Cast Ready and the Google Cast Ready Badge are trademarks of Google Inc
+
+### License
+License information [LICENSE](LICENSE.txt)

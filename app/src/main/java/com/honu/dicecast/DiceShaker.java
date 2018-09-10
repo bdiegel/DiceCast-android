@@ -6,20 +6,26 @@ import android.hardware.SensorEventListener;
 
 public class DiceShaker implements SensorEventListener {
 
+    private static final String TAG = DiceShaker.class.getSimpleName();
+
     // Minimum acceleration needed to register as a shake
-    private static final int MIN_ACCELERATION = 5;
+    private static final int MIN_ACCELERATION = 8;
 
     // Minimum number of movements to register as a shake
     private static final int MIN_MOVEMENTS = 3;
+
     // Indexes for x, y, and z values
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
+
     // Initialized to -1 to suppress the very first event when values are initialized
     int moveCount = -1;
+
     // Arrays to store gravity and linear acceleration values
     private float[] mGravity = {0.0f, 0.0f, 0.0f};
     private float[] mLinearAcceleration = {0.0f, 0.0f, 0.0f};
+
     // OnShakeListener that will be notified when the shake is detected
     private IDiceShakeListener mShakeListener;
 
@@ -42,6 +48,7 @@ public class DiceShaker implements SensorEventListener {
 
             // Enforce a minimum number of movements
             if (moveCount > MIN_MOVEMENTS) {
+                //Log.d(TAG, "shake - moveCount=" + moveCount + " acceleration: " + maxLinearAcceleration + " min: " + MIN_ACCELERATION);
                 mShakeListener.onShake();
                 resetShakeDetection();
             }

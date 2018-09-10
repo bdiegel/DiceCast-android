@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 def versionMajor = 1
-def versionMinor = 0
+def versionMinor = 2
 def versionPatch = 0
-def versionBuild = 1
+def versionBuild = 0
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
@@ -51,6 +51,8 @@ if ( project.ext.loadSign ) {
 }
 
 dependencies {
-    //compile project(path: ':CastCompanionLibrary')
-    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.3'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:mediarouter-v7:27.1.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:16.0.1'
+    implementation 'com.google.android.gms:play-services-cast:16.0.1'
 }

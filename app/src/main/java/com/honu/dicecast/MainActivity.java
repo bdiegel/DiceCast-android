@@ -91,10 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
         // register dice shake listener fpr accelerometer events
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
         sensorManager.registerListener(
               diceShaker,
               sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-              SensorManager.SENSOR_DELAY_NORMAL);
+              SensorManager.SENSOR_DELAY_UI);
 
         // show introductory overlay
         castStateListener = new CastStateListener() {
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         sensorManager.registerListener(
               diceShaker,
               sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-              SensorManager.SENSOR_DELAY_NORMAL);
+              SensorManager.SENSOR_DELAY_UI);
 
         super.onResume();
     }

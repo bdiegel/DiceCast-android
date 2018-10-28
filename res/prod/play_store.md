@@ -8,7 +8,7 @@ A "Google Cast™ Ready" dice roller for Android.
 
 ## FULL DESCRIPTION
 
-DiceCast is an app that runs standalone or connected to your ChromeCast. Just tap the screen or shake your device to roll the dice. Supports 2d6.
+DiceCast runs standalone or connected to your ChromeCast. Just tap the screen or shake your device to roll the dice. Supports 2d6.
 
 ## CATEGORIZATION
 

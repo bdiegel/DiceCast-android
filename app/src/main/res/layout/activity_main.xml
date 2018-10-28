@@ -1,11 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable = "true"
-    android:background="@color/green_900"
-    tools:context="com.honu.dicecast.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/root_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable = "true"
+                android:background="@color/green_900"
+                tools:context="com.honu.dicecast.MainActivity"
+                android:focusable="true">
 
     <include
         android:id="@+id/toolbar"
@@ -84,7 +85,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="128dip"
+            android:layout_height="128dp"
             android:clickable="false"
             android:id="@+id/imageViewDie1"
             android:src="@drawable/dice_3"
@@ -98,7 +99,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="128dip"
+            android:layout_height="128dp"
             android:clickable="false"
             android:id="@+id/imageViewDie2"
             android:src="@drawable/dice_4"

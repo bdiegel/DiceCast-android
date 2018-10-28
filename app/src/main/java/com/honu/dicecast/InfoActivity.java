@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -79,7 +81,7 @@ public class InfoActivity extends AppCompatActivity {
         alert.setTitle("License information");
 
         TextView tv = new TextView(this);
-        tv.setText(Html.fromHtml(getString(R.string.alv2_license)));
+        tv.setText(fromHtml(getString(R.string.alv2_license)));
         tv.setMovementMethod(new ScrollingMovementMethod());
         tv.setPadding(12, 0, 12, 0);
         alert.setView(tv);
@@ -91,6 +93,15 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
         alert.show();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(html);
+        }
     }
 
     protected void sendEmail() {
@@ -131,7 +142,7 @@ public class InfoActivity extends AppCompatActivity {
         private Context context;
         private List<Pair<String, String>> data;
 
-        public PairAdapter(Context context, List<Pair<String, String>> data) {
+        PairAdapter(Context context, List<Pair<String, String>> data) {
             this.context = context;
             this.data = data;
         }

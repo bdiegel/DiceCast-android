@@ -6,20 +6,31 @@ import android.hardware.SensorEventListener;
 
 public class DiceShaker implements SensorEventListener {
 
+    private static final String TAG = DiceShaker.class.getSimpleName();
+
     // Minimum acceleration needed to register as a shake
-    private static final int MIN_ACCELERATION = 5;
+//    private static final int MIN_ACCELERATION = 5;
+    private static final int MIN_ACCELERATION = 6;
 
     // Minimum number of movements to register as a shake
+//    private static final int MIN_MOVEMENTS = 3;
     private static final int MIN_MOVEMENTS = 3;
-    // Indexes for x, y, and z values
+
+    // Indexes for x, y, and z valuesadb
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
+
     // Initialized to -1 to suppress the very first event when values are initialized
     int moveCount = -1;
+
+
     // Arrays to store gravity and linear acceleration values
     private float[] mGravity = {0.0f, 0.0f, 0.0f};
     private float[] mLinearAcceleration = {0.0f, 0.0f, 0.0f};
+
+    private long lastEventTime = 0;
+
     // OnShakeListener that will be notified when the shake is detected
     private IDiceShakeListener mShakeListener;
 
@@ -30,22 +41,33 @@ public class DiceShaker implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Update current values
-        setCurrentAcceleration(event);
-
-        // Get the max linear acceleration in any direction
-        float maxLinearAcceleration = getMaxCurrentLinearAcceleration();
-
-        // Check if the acceleration is greater than our minimum threshold
-        if (maxLinearAcceleration > MIN_ACCELERATION) {
-            moveCount++;
-
-            // Enforce a minimum number of movements
-            if (moveCount > MIN_MOVEMENTS) {
-                mShakeListener.onShake();
-                resetShakeDetection();
-            }
+        // Enforce pause between rolls
+        //if (event.timestamp < lastEventTime + 1500000000L) { // 1.5 sec (in nanoseconds)
+        if (event.timestamp < lastEventTime + 500000000L) { // .5 sec (in nanoseconds)
+            return;
         }
+
+            // Update current values
+            setCurrentAcceleration(event);
+
+            // Get the max linear acceleration in any direction
+            float maxLinearAcceleration = getMaxCurrentLinearAcceleration();
+
+            // Check if the acceleration is greater than our minimum threshold
+            if (maxLinearAcceleration > MIN_ACCELERATION) {
+                moveCount++;
+
+                // Enforce a minimum number of movements
+                if (moveCount >= MIN_MOVEMENTS) {
+//                    Log.d(TAG, "shake - moveCount=" + moveCount + " acceleration: " + maxLinearAcceleration + " min: " + MIN_ACCELERATION + " time: " + event.timestamp);
+                    resetShakeDetection();
+                    lastEventTime = event.timestamp;
+                    mShakeListener.onShake();
+                }
+//                else {
+//                    Log.d(TAG, "move - moveCount=" + moveCount + " acceleration: " + maxLinearAcceleration + " min: " + MIN_ACCELERATION + " time: " + event.timestamp);
+//                }
+            }
     }
 
     @Override

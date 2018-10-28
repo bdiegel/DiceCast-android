@@ -11,17 +11,20 @@ DiceCast demonstrates how to use the Cast API for non-media based application de
 application that communicates with the receiver application using a custom channel. It was developed
 before the ability to cast your Android screen was available.
 
+### Cast Application Framework
+The current version of this project uses the [Cast Application Framework](https://developers.google.com/cast/docs/android_sender_setup).
+
 ### CastCompanionLibrary
-This project uses the [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android),
+An older version of this project used the [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android),
 a wrapper around the Cast SDK that reduces the amount of boilerplate code needed by an 
 application to provide basic casting.
  
 Have a look at some basic cast examples that do not use CCL:
 
 * The sample application [CastHelloText-android](https://github.com/googlecast/CastHelloText-android.git)
-* The DiceCast MainActivity prior to integrating CCL [v1.0.0](https://github.com/bdiegel/DiceCast-android/blob/v1.0.0/app/src/main/java/com/honu/dicecast/MainActivity.java) 
+* The DiceCast MainActivity prior to integrating CCL [v1.0.0](https://github.com/bdiegel/DiceCast-android/blob/v1.0.0/app/src/main/java/com/honu/dicecast/MainActivity.java)
 
-### Project Setup
+### Project Setup v1.1.0 - using CCL
 This is an Android Studio project. The default build setup has no external dependencies.
 
 You can also build the CCL library yourself from the project [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android).
@@ -34,6 +37,7 @@ The structure of the working directory:
   3. git clone [https://github.com/googlecast/CastCompanionLibrary-android]() CastCompanionLibrary
 
 ### Acknowledgments
+* The [Cast Application Framework](https://developers.google.com/cast/docs/android_sender_setup)
 * The [CastCompanionLibrary](https://github.com/googlecast/CastCompanionLibrary-android) is provided by [googlecast](https://github.com/googlecast) 
 * DiceCast artwork was provided by [Dino Morelli](https://github.com/dino-)
 * [DiceShaker](https://github.com/bdiegel/DiceCast-android/blob/master/app/src/main/java/com/honu/dicecast/DiceShaker.java) 
